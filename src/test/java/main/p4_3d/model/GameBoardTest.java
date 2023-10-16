@@ -24,6 +24,7 @@ public class GameBoardTest {
         assertEquals(1, gameBoard.getCurrentPlayer()); // Vérifie que le joueur actuel est maintenant le joueur 2
         assertFalse(gameBoard.IsMoveValid(0, 0, 0)); // La case (0, 0, 0) n'est plus valide après avoir été jouée
         System.out.println("Le joueur change bien l'état de la case sur lequel il joue, il ne peut plus jouer dessus dorénanvant");
+
     }
 
     @Test
@@ -34,7 +35,7 @@ public class GameBoardTest {
         assertEquals(2, gameBoard.getCurrentPlayer()); // Le joueur actuel est maintenant le joueur 2
         gameBoard.SwitchPlayer(); // Passe de nouveau au joueur 1
         assertEquals(1, gameBoard.getCurrentPlayer()); // Le joueur actuel est de retour au joueur 1
-        System.out.println("Le joueur change après chaque coup joué");
+        System.out.println("Switch player fonctionne");
     }
 
     @Test
@@ -45,49 +46,211 @@ public class GameBoardTest {
         assertFalse(gameBoard.IsMoveValid(0, 0, 0)); // La case (0, 0, 0) n'est plus valide après avoir été jouée
         System.out.println("Un joueur ne peux pas jouer sur une case déjà jouée");
     }
+
     @Test
-    public void testHorizontalWinXIs0() {
-        gameBoard.PlayMove(0, 0, 0);
-        gameBoard.PlayMove(0, 1, 0);
-        gameBoard.PlayMove(0, 2, 0);
-        gameBoard.PlayMove(0, 3, 0);
-        assertTrue(gameBoard.checkHorizontalLines());
-        System.out.println("ligne horizontale X=0 au Z=0 est OK");
+    public void testCheckInARowIsTrue(){
+        // Test si checkInARow compare correctement les valeurs
+        assertTrue(gameBoard.CheckFourInARow(1,1,1,1));
+    }
+
+// ------- test qui vérifie que le jeu est gagné -------
+
+    // ------- ligne horizontal et vertical
+    @Test
+    public void testVerticalLineLevel0(){
+        gameBoard.PlayMove(0,0,0);
+        gameBoard.PlayMove(0,1,0);
+        gameBoard.PlayMove(0,2,0);
+        gameBoard.PlayMove(0,3,0);
+        assertTrue(gameBoard.CheckLines());
+        System.out.println("le jeu détecte bien une ligne vertical au niveau 0");
     }
 
     @Test
-    public void testHorizontalWinXIs1() {
-        gameBoard.PlayMove(1, 0, 0);
-        gameBoard.PlayMove(1, 1, 0);
-        gameBoard.PlayMove(1, 2, 0);
-        gameBoard.PlayMove(1, 3, 0);
-        assertTrue(gameBoard.checkHorizontalLines());
-        System.out.println("ligne horizontale X=1 au Z=0 est OK");
+    public void testVerticalLineLevel1(){
+        gameBoard.PlayMove(1,3,2);
+        gameBoard.PlayMove(1,2,2);
+        gameBoard.PlayMove(1,1,2);
+        gameBoard.PlayMove(1,0,2);
+        assertTrue(gameBoard.CheckLines());
+        System.out.println("le jeu détecte bien une ligne vertical au niveau 1");
     }
 
     @Test
-    public void testHorizontalWinXIs2() {
-        gameBoard.PlayMove(2, 0, 0);
-        gameBoard.PlayMove(2, 1, 0);
-        gameBoard.PlayMove(2, 2, 0);
-        gameBoard.PlayMove(2, 3, 0);
-        assertTrue(gameBoard.checkHorizontalLines());
-        System.out.println("ligne horizontale X=2 au Z=0 est OK");
+    public void testVerticalLineLevel2(){
+        gameBoard.PlayMove(2,0,1);
+        gameBoard.PlayMove(2,1,1);
+        gameBoard.PlayMove(2,2,1);
+        gameBoard.PlayMove(2,3,1);
+        assertTrue(gameBoard.CheckLines());
+        System.out.println("le jeu détecte bien une ligne vertical au niveau 2");
     }
 
     @Test
-    public void testHorizontalWinXIs3() {
-        gameBoard.PlayMove(3, 0, 0);
-        gameBoard.PlayMove(3, 1, 0);
-        gameBoard.PlayMove(3, 2, 0);
+    public void testVerticalLineLevel3(){
+        gameBoard.PlayMove(3,3,3);
+        gameBoard.PlayMove(3,2,3);
+        gameBoard.PlayMove(3,1,3);
+        gameBoard.PlayMove(3,0,3);
+        assertTrue(gameBoard.CheckLines());
+        System.out.println("le jeu détecte bien une ligne vertical au niveau 3");
+    }
+
+    // ------------------------------------------------------------
+    @Test
+    public void testHorizontalLineLevel0(){
+        gameBoard.PlayMove(0,0,0);
+        gameBoard.PlayMove(0,0,1);
+        gameBoard.PlayMove(0,0,2);
+        gameBoard.PlayMove(0,0,3);
+        assertTrue(gameBoard.CheckLines());
+        System.out.println("le jeu détecte bien une ligne horizontal au niveau 0");
+    }
+
+    @Test
+    public void testHorizontalLineLevel1(){
+        gameBoard.PlayMove(1,2,3);
+        gameBoard.PlayMove(1,2,2);
+        gameBoard.PlayMove(1,2,1);
+        gameBoard.PlayMove(1,2,0);
+        assertTrue(gameBoard.CheckLines());
+        System.out.println("le jeu détecte bien une ligne horizontal au niveau 1");
+    }
+
+    @Test
+    public void testHorizontalLineLevel2(){
+        gameBoard.PlayMove(2,3,0);
+        gameBoard.PlayMove(2,3,1);
+        gameBoard.PlayMove(2,3,2);
+        gameBoard.PlayMove(2,3,3);
+        assertTrue(gameBoard.CheckLines());
+        System.out.println("le jeu détecte bien une ligne horizontal au niveau 2");
+    }
+    @Test
+    public void testHorizontalLineLevel3(){
+        gameBoard.PlayMove(3,1,3);
+        gameBoard.PlayMove(3,1,2);
+        gameBoard.PlayMove(3,1,1);
+        gameBoard.PlayMove(3,1,0);
+        assertTrue(gameBoard.CheckLines());
+        System.out.println("le jeu détecte bien une ligne horizontal au niveau 3");
+    }
+
+
+    // -------- test lignes diagonales --------
+    @Test
+    public void testDiagonaleLevel0(){
+        gameBoard.PlayMove(0,0,0);
+        gameBoard.PlayMove(0,1,1);
+        gameBoard.PlayMove(0,2,2);
+        gameBoard.PlayMove(0,3,3);
+        assertTrue(gameBoard.CheckLines());
+        System.out.println("Nous prenons en charge les diagonales au niveau 0");
+    }
+    @Test
+    public void testDiagonaleInverseLevel0(){
+        gameBoard.PlayMove(0,3,3);
+        gameBoard.PlayMove(0,2,2);
+        gameBoard.PlayMove(0,1,1);
+        gameBoard.PlayMove(0,0,0);
+        assertTrue(gameBoard.CheckLines());
+        System.out.println("Nous prenons en charge les diagonales inverser au niveau 0");
+    }
+
+    @Test
+    public void testDiagonaleInverseLevel1(){
+        gameBoard.PlayMove(1,3,3);
+        gameBoard.PlayMove(1,2,2);
+        gameBoard.PlayMove(1,1,1);
+        gameBoard.PlayMove(1,0,0);
+        assertTrue(gameBoard.CheckLines());
+        System.out.println("Nous prenons en charge les diagonales inverser au niveau 1");
+    }
+
+    @Test
+    public void testDiagonaleInverseLevel2(){
+        gameBoard.PlayMove(2,3,3);
+        gameBoard.PlayMove(2,2,2);
+        gameBoard.PlayMove(2,1,1);
+        gameBoard.PlayMove(2,0,0);
+        assertTrue(gameBoard.CheckLines());
+        System.out.println("Nous prenons en charge les diagonales inverser au niveau 2");
+    }
+
+    @Test
+    public void testDiagonaleLevel3(){
+        gameBoard.PlayMove(3,0,0);
+        gameBoard.PlayMove(3,1,1);
+        gameBoard.PlayMove(3,2,2);
+        gameBoard.PlayMove(3,3,3);
+        assertTrue(gameBoard.CheckLines());
+        System.out.println("Nous prenons en charge les diagonales au niveau 3");
+    }
+
+    // ------- test les lignes 3D -----------
+
+    @Test
+    public void testHorizontalLine3D() {
         gameBoard.PlayMove(3, 3, 0);
-        assertTrue(gameBoard.checkHorizontalLines());
-        System.out.println("ligne horizontale X=3 au Z=0 est OK");
+        gameBoard.PlayMove(2, 3, 1);
+        gameBoard.PlayMove(1, 3, 2);
+        gameBoard.PlayMove(0, 3, 3);
+        assertTrue(gameBoard.CheckLines());
+        System.out.println("le jeu détecte un puissance 4 en diagonale 3D sur une ligne horizontal inverser");
+    }
+    @Test
+    public void testHorizontalLineInInverse3D(){
+        gameBoard.PlayMove(3,3,3);
+        gameBoard.PlayMove(2,3,2);
+        gameBoard.PlayMove(1,3,1);
+        gameBoard.PlayMove(0,3,0);
+        assertTrue(gameBoard.CheckLines());
+        System.out.println("le jeu détecte un puissance 4 en diagonale 3D sur une ligne horizontal inverser");
     }
 
+    @Test
+    public void testVerticalLineIn3D(){
+        gameBoard.PlayMove(0,0,3);
+        gameBoard.PlayMove(1,1,3);
+        gameBoard.PlayMove(2,2,3);
+        gameBoard.PlayMove(3,3,3);
+        assertTrue(gameBoard.CheckLines());
+        System.out.println("le jeu détecte un puissance 4 en diagonale 3D sur une ligne verticale");
+    }
+
+    @Test
+    public void testVerticalLineIn3D2(){
+        gameBoard.PlayMove(0,1,0);
+        gameBoard.PlayMove(1,1,1);
+        gameBoard.PlayMove(2,1,2);
+        gameBoard.PlayMove(3,1,3);
+        assertTrue(gameBoard.CheckLines());
+        System.out.println("le jeu détecte un puissance 4 en diagonale 3D sur une ligne verticale");
+    }
+
+    @Test
+    public void testVerticalLineInInverse3D(){
+        gameBoard.PlayMove(3,0,0);
+        gameBoard.PlayMove(2,1,0);
+        gameBoard.PlayMove(1,2,0);
+        gameBoard.PlayMove(0,3,0);
+        assertTrue(gameBoard.CheckLines());
+        System.out.println("le jeu détecte un puissance 4 en diagonale 3D sur une ligne verticale inverser");
+    }
+
+    // -------- test qui vérifie que le jeu continue -----------
+
+    @Test
+    public void testNoWinOnALine(){
+        gameBoard.PlayMove(0,0,0);
+        gameBoard.PlayMove(0,0,3);
+        gameBoard.PlayMove(0,1,1);
+        gameBoard.PlayMove(0,1,2);
+        assertFalse(gameBoard.CheckLines());
+    }
 }
 
-    // test les conditions horizontales au niveau 0
+
 //    @Test
 //    public void testHorizontalWinXIs0() {
 //        gameBoard.PlayMove(0, 0, 0);
@@ -98,68 +261,4 @@ public class GameBoardTest {
 //        System.out.println("ligne horizontale X=0 au Z=0 est OK");
 //    }
 //
-//    @Test
-//    public void testHorizontalWinXIs1() {
-//        gameBoard.PlayMove(1, 0, 0);
-//        gameBoard.PlayMove(1, 1, 0);
-//        gameBoard.PlayMove(1, 2, 0);
-//        gameBoard.PlayMove(1, 3, 0);
-//        assertTrue(gameBoard.checkHorizontalLines());
-//        System.out.println("ligne horizontale X=1 au Z=0 est OK");
-//    }
 //
-//   @Test
-//   public void testHorizontalFail0(){
-//        gameBoard.PlayMove(0, 0, 0);
-//        gameBoard.PlayMove(1, 0, 0);
-//        gameBoard.PlayMove(2, 0, 0);
-//        gameBoard.PlayMove(3, 0, 0);
-//        assertFalse(gameBoard.checkHorizontalLines());
-//        System.out.println("il y a bien une suite de 4 mais elle n'est pas horizontale");
-//    }
-//
-//    @Test
-//    public  void testHorizontalWin1(){
-//        gameBoard.PlayMove(0, 0, 1);
-//        gameBoard.PlayMove(0, 1, 1);
-//        gameBoard.PlayMove(0, 2, 1);
-//        gameBoard.PlayMove(0, 3, 1);
-//        assertTrue(gameBoard.checkHorizontalLines());
-//        System.out.println("ligne horizontale au niveau 1 est OK");
-//    }
-//
-//    @Test
-//    public void testVerticalWin() {
-//        gameBoard.PlayMove(0, 0, 0);
-//        gameBoard.PlayMove(1, 0, 0);
-//        gameBoard.PlayMove(2, 0, 0);
-//        gameBoard.PlayMove(3, 0, 0);
-//        assertTrue(gameBoard.GameIsWin());
-//    }
-//
-//    @Test
-//    public void testVerticalWinFail() {
-//        gameBoard.PlayMove(0, 0, 0);
-//        gameBoard.PlayMove(1, 0, 0);
-//        gameBoard.PlayMove(2, 0, 0);
-//        gameBoard.PlayMove(3, 0, 0);
-//        assertFalse(gameBoard.checkVerticaleLines());
-//    }
-//
-//    @Test
-//    public void testDiagonalWin() {
-//        gameBoard.PlayMove(0, 0, 0);
-//        gameBoard.PlayMove(1, 1, 0);
-//        gameBoard.PlayMove(2, 2, 0);
-//        gameBoard.PlayMove(3, 3, 0);
-//        assertTrue(gameBoard.GameIsWin());
-//    }
-//
-//    @Test
-//    public void testColumnWin(){
-//        gameBoard.PlayMove(0, 0, 0);
-//        gameBoard.PlayMove(0, 0, 1);
-//        gameBoard.PlayMove(0, 0, 2);
-//        gameBoard.PlayMove(0, 0, 3);
-//        assertTrue(gameBoard.GameIsWin());
-//    }

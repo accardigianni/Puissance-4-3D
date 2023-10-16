@@ -6,14 +6,13 @@ public class GameBoard {
     private int px, py, pz;
     private int currentPlayer;// variable player
 
-    public GameBoard(int px, int py, int pz){
-        this.px = px; // vertical
-        this.py = py; // horizontal
-        this.pz = pz; // hauteur
+    public  GameBoard(int px, int py, int pz){
+        this.px = px; // nb de tableau
+        this.py = py; // nb de ligne
+        this.pz = pz; // nb de colonne
         currentPlayer = 1;
         board = new int[px][py][pz];
         InitializeBoard();
-
     }
 
     public void InitializeBoard(){ // init game grid
@@ -59,76 +58,52 @@ public class GameBoard {
 
         }
     }
-
     public boolean GameIsWin(){
-        return checkHorizontalLines() || checkVerticaleLines() || checkDiagonalsLines();
-//                || checkDiagonalsXZ() || checkDiagonalsYZ();
+       return CheckLines();
     }
 
-//
-
-    public boolean checkHorizontalLines() {
-        // Vérifie les lignes horizontales
+    public boolean CheckLines() {
+        // Vérification des lignes horizontales classiques
         for (int x = 0; x < px; x++) {
-            for (int z = 0; z < pz; z++) {
-                for (int y = 0; y < py; y++) {
-                    if (checkFourInARow(board[x][y][z], board[x][y][z + 1], board[x][y][z + 2], board[x][y][z + 3])) {
-                        return true; // Victoire sur une ligne horizontale
+            for (int y = 0; y < py; y++) {
+                // on fait pz-3 pour parcourir une seule fois l'axe d'une colonne
+                for (int z = 0; z < pz - 3; z++) {
+                    if (CheckFourInARow(board[x][y][z], board[x][y][z + 1], board[x][y][z + 2], board[x][y][z + 3])) {
+                        return true;
                     }
                 }
             }
         }
+
+        // Vérification des lignes verticales classiques
+        for (int x = 0; x < px; x++) {
+            // on fait py - 3 pour parcourir une seule fois l'axe d'une ligne
+            for (int y = 0; y < py - 3; y++) {
+                for (int z = 0; z < pz; z++) {
+                    if (CheckFourInARow(board[x][y][z], board[x][y + 1][z], board[x][y + 2][z], board[x][y + 3][z])) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        // Vérification des lignes diagonales
+        for (int x = 0; x < px ; x++) {
+            for (int y = 0; y < py - 3; y++) {
+                for (int z = 0; z < pz - 3; z++) {
+                    if (CheckFourInARow(board[x][y][z], board[x][y + 1][z + 1], board[x][y + 2][z + 2], board[x][y + 3][z + 3])) {
+                        return true;
+                    }
+                }
+            }
+        }
+
         return false;
     }
 
-//    public boolean checkVerticaleLines() {
-//        // Vérifie les lignes verticales
-//        for (int x = 0; x < px; x++) {
-//            for (int y = 0; y < py - 3; y++) {
-//                for (int z = 0; z < pz; z++) {
-//                    if (checkFourInARow(board[x][y][z], board[x][y + 1][z], board[x][y + 2][z], board[x][y + 3][z])) {
-//                        return true; // Victoire sur une colonne
-//                    }
-//                }
-//            }
-//        }
-//        return false;
-//    }
+    public boolean CheckFourInARow(int a, int b, int c , int d){
+        // vérifie si toute les valeur d'une ligne sont identiques
+        return a == b && b == c && c == d && a != 0;
 
-//    private boolean checkDiagonalsLines() {
-//        // Vérifie les diagonales dans le plan XY (horizontale et verticale)
-//        for (int x = 0; x < px - 3; x++) {
-//            for (int y = 0; y < py - 3; y++) {
-//                for (int z = 0; z < pz; z++) {
-//                    if (checkFourInARow(board[x][y][z], board[x + 1][y + 1][z], board[x + 2][y + 2][z], board[x + 3][y + 3][z])) {
-//                        return true; // Victoire sur une diagonale dans le plan XY
-//                    }
-//                }
-//            }
-//        }
-//        return false;
-//    }
-
-// Ajoutez les méthodes checkDiagonalsXZ et checkDiagonalsYZ de manière similaire
-
-    private boolean checkFourInARow(int... values) {
-        int count = 0; // Compteur de valeurs identiques
-        for (int value : values) {
-            if (value != 0) { // Si la valeur n'est pas nulle
-                if (count == 0) {
-                    count = 1; // Démarre le compteur à 1
-                } else if (value == values[count - 1]) {
-                    count++; // Incrémente le compteur si la valeur est identique à la précédente
-                    if (count == 4) {
-                        return true; // Séquence de 4 valeurs identiques trouvée
-                    }
-                } else {
-                    count = 1; // Réinitialise le compteur si la séquence est interrompue
-                }
-            } else {
-                count = 0; // Réinitialise le compteur si la valeur est nulle
-            }
-        }
-        return false; // Aucune séquence de 4 valeurs identiques trouvée
     }
 }
