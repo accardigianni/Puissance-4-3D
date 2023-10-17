@@ -117,6 +117,7 @@ public class GameBoardTest {
         assertTrue(gameBoard.CheckLines());
         System.out.println("Le jeu détecte bien une ligne horizontale au niveau 0 avec x=0 et y=1");
     }
+
     @Test
     public void testHorizontalLineLevel0WithY2() {
         gameBoard.PlayMove(0, 2, 0);
@@ -126,6 +127,7 @@ public class GameBoardTest {
         assertTrue(gameBoard.CheckLines());
         System.out.println("Le jeu détecte bien une ligne horizontale au niveau 0 avec x=0 et y=2");
     }
+
     @Test
     public void testHorizontalLineLevel0WithY3() {
         gameBoard.PlayMove(0, 3, 0);
@@ -165,6 +167,7 @@ public class GameBoardTest {
         assertTrue(gameBoard.CheckLines());
         System.out.println("le jeu détecte bien une ligne horizontal au niveau 2 avec x=2 y=3");
     }
+
     @Test
     public void testHorizontalLineLevel3(){
         gameBoard.PlayMove(3,1,3);
@@ -174,7 +177,6 @@ public class GameBoardTest {
         assertTrue(gameBoard.CheckLines());
         System.out.println("le jeu détecte bien une ligne horizontal au niveau 3");
     }
-
 
     // -------- test lignes diagonales --------
     @Test
@@ -186,6 +188,7 @@ public class GameBoardTest {
         assertTrue(gameBoard.CheckLines());
         System.out.println("Nous prenons en charge les diagonales au niveau 0");
     }
+
     @Test
     public void testDiagonaleInverseLevel0(){
         gameBoard.PlayMove(0,3,3);
@@ -227,8 +230,6 @@ public class GameBoardTest {
     }
 
     // ------- test les lignes 3D -----------
-
-
     @Test
     public void testColonne3D(){
         gameBoard.PlayMove(0,0,0);
@@ -239,8 +240,7 @@ public class GameBoardTest {
         System.out.println("Nous prenons en charge les colonnes 3D");
     }
 
-    // ---------------- Horizontale D-----------
-
+    // ---------------- Horizontale 3D-----------
     @Test
     public void testHorizontalLine3D() {
         gameBoard.PlayMove(3, 3, 0);
@@ -260,6 +260,7 @@ public class GameBoardTest {
         assertTrue(gameBoard.CheckLines());
         System.out.println("le jeu détecte un puissance 4 horizontale descendante 3D qui commence a l'index y=2 z=3");
     }
+
     @Test
     public void testHorizontaleIncreaseLine(){
         gameBoard.PlayMove(3,2,3);
@@ -268,6 +269,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(0,2,0);
         System.out.println("le jeu détecte un puissance 4 horizontale descendante 3D qui commence a l'index y=2 z=3");
     }
+
     @Test
     public void testHorinzontaleLineIn3D2(){
         gameBoard.PlayMove(0,1,0);
@@ -276,6 +278,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(3,1,3);
         System.out.println("le jeu détecte un puissance 4 en diagonale montant 3D sur une ligne horizontale qui commence à l'index y=1 z=0");
     }
+
     @Test
     public void testHorizontalLineInInverse3D(){
         gameBoard.PlayMove(3,3,3);
@@ -285,7 +288,6 @@ public class GameBoardTest {
         System.out.println("le jeu détecte un puissance 4 en diagonale montant 3D sur une ligne horizontal qui commence à l'index y=3 z=0");
     }
 
-
     // ------------------ Verticale 3D-----------------
     @Test
     public void testVerticalLineIn3D(){
@@ -294,10 +296,8 @@ public class GameBoardTest {
         gameBoard.PlayMove(2,2,3);
         gameBoard.PlayMove(3,3,3);
         assertTrue(gameBoard.CheckLines());
-        System.out.println("le jeu détecte un puissance 4 en diagonale vertical montant 3D  qui commence à l'index y=0 z=3");
+        System.out.println("le jeu détecte un puissance 4 en vertical montant 3D  qui commence à l'index y=0 z=3");
     }
-
-
 
     @Test
     public void testVerticalLineInInverse3D(){
@@ -306,7 +306,47 @@ public class GameBoardTest {
         gameBoard.PlayMove(1,2,0);
         gameBoard.PlayMove(0,3,0);
         assertTrue(gameBoard.CheckLines());
-        System.out.println("le jeu détecte un puissance 4 en diagonale verticale descendant 3D qui commence a l'index y=0 z=0");
+        System.out.println("le jeu détecte un puissance 4 en verticale descendant 3D qui commence a l'index y=0 z=0");
+    }
+
+    //------------Diagonale 3D -------------
+    @Test
+    public void testRisingDiagonale3D(){
+        gameBoard.PlayMove(0,0,0);
+        gameBoard.PlayMove(1,1,1);
+        gameBoard.PlayMove(2,2,2);
+        gameBoard.PlayMove(3,3,3);
+        assertTrue(gameBoard.CheckLines());
+        System.out.println("le jeu détecte un puissance 4 diagonale 3D montante qui commence à l'index x=0 y=0 z=0");
+    }
+    @Test
+    public void testDescendingDiagonale3D(){
+        gameBoard.PlayMove(0,3,3);
+        gameBoard.PlayMove(1,2,2);
+        gameBoard.PlayMove(2,1,1);
+        gameBoard.PlayMove(3,0,0);
+        assertTrue(gameBoard.CheckLines());
+        System.out.println("le jeu détecte un puissance 4 diagonale 3D descendante qui commence à l'index x=0 y=3 z=3");
+    }
+
+    @Test
+    public void testInverseRisingDiagonale3D(){
+        gameBoard.PlayMove(0,3,0);
+        gameBoard.PlayMove(1,2,1);
+        gameBoard.PlayMove(2,1,2);
+        gameBoard.PlayMove(3,0,3);
+        assertTrue(gameBoard.CheckLines());
+        System.out.println("le jeu détecte un puissance 4 diagonale 3D montante qui commence à l'index x=0 y=3 z=0");
+    }
+
+    @Test
+    public void testInverseDescendingDiagonale3D(){
+        gameBoard.PlayMove(0,0,3);
+        gameBoard.PlayMove(1,1,2);
+        gameBoard.PlayMove(2,2,1);
+        gameBoard.PlayMove(3,3,0);
+        assertTrue(gameBoard.CheckLines());
+        System.out.println("le jeu détecte un puissance 4 diagonale 3D descendante qui commence à l'index x=0 y=0 z=3");
     }
 
     // -------- test qui vérifie que le jeu continue -----------
