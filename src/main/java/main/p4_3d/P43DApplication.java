@@ -1,5 +1,6 @@
 package main.p4_3d;
 
+import main.p4_3d.model.GameBoard.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
