@@ -191,10 +191,10 @@ public class GameBoardTest {
 
     @Test
     public void testDiagonaleInverseLevel0(){
-        gameBoard.PlayMove(0,3,3);
-        gameBoard.PlayMove(0,2,2);
-        gameBoard.PlayMove(0,1,1);
-        gameBoard.PlayMove(0,0,0);
+        gameBoard.PlayMove(0,3,0);
+        gameBoard.PlayMove(0,2,1);
+        gameBoard.PlayMove(0,1,2);
+        gameBoard.PlayMove(0,0,3);
         assertTrue(gameBoard.CheckLines());
         System.out.println("Nous prenons en charge les diagonales inverser au niveau 0");
     }

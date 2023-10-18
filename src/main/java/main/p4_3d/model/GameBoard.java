@@ -62,11 +62,16 @@ public class GameBoard {
             return false;
         }
 
+        // if a player already play in a case, the next playmove must be on the upper case
         if(board[px][py][pz] != 0){
             return false;
         }
-
         return true;
+    }
+
+    public boolean IsAlreadyPlay(int px, int py, int pz ){
+
+        return false;
     }
 
     public void PlayMove(int px, int py, int pz){ // change state of case
@@ -84,10 +89,18 @@ public class GameBoard {
 
     public boolean CheckLines() {
 
-        // Checking classic horizontal lines
+        // Checking classic lines in all array
         for (int x = 0; x < px; x++) {
             for (int y = 0; y < py; y++) {
-                // do pz-3 to traverse a column axis once only
+                if(y==0){
+                    // Checking classic vertical lines
+                    for (int z = 0; z < pz; z++) {
+                        if (CheckFourInARow(board[x][y][z], board[x][y+1][z], board[x][y+2][z], board[x][y+3][z])) {
+                            return true;
+                        }
+                    }
+                }
+                // Checking classic horizontal lines
                 for (int z = 0; z < pz - 3; z++) {
                     if (CheckFourInARow(board[x][y][z], board[x][y][z+1], board[x][y][z+2], board[x][y][z+3])) {
                         return true;
@@ -96,115 +109,117 @@ public class GameBoard {
             }
         }
 
-        // 3D rising horizontal lines
-        for (int x = 0; x < px - 3; x++) {
-            for (int y = 0; y < py; y++) {
-                for ( int z = 0; z < pz - 3; z++) {
-                    if (CheckFourInARow(board[x][y][z],board[x+1][y][z+1],board[x+2][y][z+2],board[x+3][y][z+3])){
-                        return true;
+
+        // 3D Horizontal lines
+        for (int x = 0; x < px -3; x++) {
+                for (int y = 0; y < py; y++) {
+                    for (int z = 0; z < pz -3; z++) {
+                        // Horizontal 3D left to right
+                        if (CheckFourInARow(board[x][y][z],board[x+1][y][z+1],board[x+2][y][z+2],board[x+3][y][z+3])){
+                            return true;
+                        }
+                        // Horizontal 3D right to left
+                        if(CheckFourInARow(board[x+3][y][z],board[x+2][y][z+1],board[x+1][y][z+2],board[x][y][z+3])){
+                            return true;
+                        }
                     }
                 }
-            }
         }
 
-        // 3D descending horizontal lines
-        for (int x = 3; x < px; x++) {
-            for (int y = 0; y < py; y++) {
-                for ( int z = 3; z < pz; z++) {
-                    if (CheckFourInARow(board[x][y][z-3],board[x-1][y][z-2],board[x-2][y][z-1],board[x-3][y][z])){
-                        return true;
-                    }
-                }
-            }
-        }
-
-        // Checking classic vertical lines
-        for (int x = 0; x < px; x++) {
-            // on fait py - 3 pour parcourir une seule fois l'axe d'une ligne
-            for (int y = 0; y < py - 3; y++) {
-                for (int z = 0; z < pz; z++) {
-                    if (CheckFourInARow(board[x][y][z], board[x][y+1][z], board[x][y+2][z], board[x][y+3][z])) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        //3D rising vertical lines
-        for (int x = 0; x < px - 3; x++){
-            for ( int y = 3; y < py; y++){
+        // 3D vertical lines
+        for (int x = 0; x < px -3 ; x++){
+            for ( int y = 0; y < py -3 ; y++){
                 for ( int z = 0 ; z < pz; z++){
-                    if (CheckFourInARow(board[x][y][z], board[x+1][y-1][z],board[x+2][y-2][z],board[x+3][y-3][z])){
+                    // Vertical 3D up to down
+                    if (CheckFourInARow(board[x][y][z], board[x+1][y+1][z],board[x+2][y+2][z],board[x+3][y+3][z])){
+                        return true;
+                    }
+                    // Vertical 3D down to up
+                    if(CheckFourInARow(board[x+3][y][z],board[x+2][y+1][z],board[x+1][y+2][z],board[x][y+3][z])){
                         return true;
                     }
                 }
             }
         }
 
-        // 3D vertical descending lines
-        for (int x = 3; x < px; x++){
-            for ( int y = 3; y < py; y++){
-                for ( int z = 0 ; z < pz; z++){
-                    if (CheckFourInARow(board[x][y][z], board[x-1][y-1][z],board[x-2][y-2][z],board[x-3][y-3][z])){
-                        return true;
+
+        // Checking diagonal lines
+        for ( int x = 0; x < px ; x++) {
+                for (int y = 0; y < py; y++) {
+                    if (y == 0) {
+                        for (int z = 0; z < pz; z++) {
+                            if (z == 0) {
+                                // Diagonal 3D left to right
+                                if (CheckFourInARow(board[x-x][y][z], board[x-x+1][y+1][z+1], board[x-x+2][y+2][z+2], board[x-x+3][y+3][z+3])) {
+                                    return true;
+                                }
+                                // Diagonal classic left to right x=0
+                                if (CheckFourInARow(board[x-x][y][z],board[x-x][y+1][z+1],board[x-x][y+2][z+2],board[x-x][y+3][z+3])){
+                                    return true;
+                                }
+                                // Diagonal classic left to right x!=0
+                                if (CheckFourInARow(board[x][y][z],board[x][y+1][z+1],board[x][y+2][z+2],board[x][y+3][z+3])){
+                                    return true;
+                                }
+                            }
+
+                            if (z == 3) {
+                                // Diagonal 3D right to left
+                                if (CheckFourInARow(board[x-x][y][z], board[x-x+1][y+1][z-1], board[x-x+2][y+2][z-2], board[x-x+3][y+3][z-3])) {
+                                    return true;
+                                }
+                                // Diagonal classic right to left x=0
+                                if (CheckFourInARow(board[x-x][y][z],board[x-x][y+1][z-1],board[x-x][y+2][z-2],board[x-x][y+3][z-3])){
+                                    return true;
+                                }
+                                // Diagonal classic right to left x!=0
+                                if (CheckFourInARow(board[x][y][z],board[x][y+1][z-1],board[x][y+2][z-2],board[x][y+3][z-3])){
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    // Reverse Diagonal 3D
+                    if(y == 3){
+                        for (int z = 0; z < pz; z++){
+                            if(z == 0){
+                                // Reverse Diagonal 3D left to right
+                                if (CheckFourInARow(board[x-x][y][z],board[x-x+1][y-1][z+1],board[x-x+2][y-2][z+2],board[x-x+3][y-3][z+3])){
+                                    return true;
+                                }
+                                // Reverse Diagonal classic left to right x=0
+                                if(CheckFourInARow(board[x-x][y][z],board[x-x][y-1][z+1],board[x-x][y-2][z+2],board[x-x][y-3][z+3])){
+                                    return true;
+                                }
+                                // Reverse Diagonal classic left to right x!=0
+                                if(CheckFourInARow(board[x][y][z],board[x][y-1][z+1],board[x][y-2][z+2],board[x][y-3][z+3])){
+                                    return true;
+                                }
+                            }
+                            if(z == 3){
+                                // Reverse Diagonal 3D right to left
+                                if (CheckFourInARow(board[x-x][y][z],board[x-x+1][y-1][z-1],board[x-x+2][y-2][z-2],board[x-x+3][y-3][z-3])){
+                                    return true;
+                                }
+                                // Reverse Diagonal 3D right to left x=0
+                                if(CheckFourInARow(board[x-x][y][z],board[x-x][y-1][z-1],board[x-x][y-2][z-2],board[x-x][y-3][z-3])){
+                                    return true;
+                                }
+                                // Reverse Diagonal 3D right to left x!=0
+                                if(CheckFourInARow(board[x][y][z],board[x][y-1][z-1],board[x][y-2][z-2],board[x][y-3][z-3])){
+                                    return true;
+                                }
+                            }
+                        }
                     }
                 }
-            }
         }
-
-        // Checking classic diagonal lines
-        for (int x = 0; x < px; x++) {
-            for (int y = 0; y < py - 3; y++) {
-                for (int z = 0; z < pz - 3; z++) {
-                    if (CheckFourInARow(board[x][y][z], board[x][y+1][z+1], board[x][y+2][z+2], board[x][y+3][z+3])) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        //3D diagonal lines
-        for ( int x = 0; x < px - 3; x++) {
-            for (int y = 0; y < py; y++) {
-                if (y == 0) {
-                    for (int z = 0; z < pz; z++) { // 2 if z=0 z=3
-                        if (z == 0) {
-                            if (CheckFourInARow(board[x][y][z], board[x+1][y+1][z+1], board[x+2][y+2][z+2], board[x+3][y+3][z+3])) {
-                                return true;
-                            }
-                        }
-                        if (z == 3) {
-                            if (CheckFourInARow(board[x][y][z], board[x+1][y+1][z-1], board[x+2][y+2][z-2], board[x+3][y+3][z-3])) {
-                                return true;
-                            }
-                        }
-                    }
-                }
-                if(y==3){
-                    for (int z = 0; z < pz; z++){
-                        if(z==0){
-                            if (CheckFourInARow(board[x][y][z],board[x+1][y-1][z+1],board[x+2][y-2][z+2],board[x+3][y-3][z+3])){
-                                return true;
-                            }
-                        }
-                        if(z==3){
-                            if (CheckFourInARow(board[x][y][z],board[x+1][y-1][z-1],board[x+2][y-2][z-2],board[x+3][y-3][z-3])){
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // 3D diagonal descending lines
-
 
         // Checking 3D columns
         for (int x = 0; x < px - 3; x++) {
             for (int y = 0; y < py ; y++) {
                 for (int z = 0; z < pz ; z++) {
-                    if (CheckFourInARow(board[x][y][z], board[x + 1][y][z], board[x + 2][y][z], board[x + 3][y][z])) {
+                    if (CheckFourInARow(board[x][y][z], board[x+1][y][z], board[x+2][y][z], board[x+3][y][z])) {
                         return true;
                     }
                 }
