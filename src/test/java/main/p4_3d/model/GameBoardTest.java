@@ -1,6 +1,5 @@
 package main.p4_3d.model;
 
-import main.p4_3d.model.GameBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,13 +16,21 @@ public class GameBoardTest {
     }
 
     @Test
+    public void testOutOfZone(){
+        assertFalse(gameBoard.IsMoveValid(4,4,4));
+        assertFalse(gameBoard.IsMoveValid(0,2,4));
+        assertFalse(gameBoard.IsMoveValid(4,2,3));
+        assertFalse(gameBoard.IsMoveValid(2,4,1));
+    }
+
+    @Test
     public void testPlayMove() {
         // Teste si PlayMove fonctionne correctement
         assertTrue(gameBoard.IsMoveValid(0, 0, 0)); // La case (0, 0, 0) est valide au début
         gameBoard.PlayMove(0, 0, 0); // Le joueur 1 joue dans la case (0, 0, 0)
         assertEquals(1, gameBoard.getCurrentPlayer()); // Vérifie que le joueur actuel est maintenant le joueur 2
         assertFalse(gameBoard.IsMoveValid(0, 0, 0)); // La case (0, 0, 0) n'est plus valide après avoir été jouée
-        System.out.println("Le joueur change bien l'état de la case sur lequel il joue, il ne peut plus jouer dessus dorénanvant");
+        System.out.println("Le joueur change bien l'état de la case sur lequel il joue, il ne peut plus jouer sur la même case dorénanvant");
 
     }
 
@@ -38,13 +45,22 @@ public class GameBoardTest {
         System.out.println("Switch player fonctionne");
     }
 
-    @Test
-    public void testIsMoveInvalidWhenAlreadyPlayed() {
-        // Teste si IsMoveValid détecte correctement une case déjà jouée
-        assertTrue(gameBoard.IsMoveValid(0, 0, 0)); // La case (0, 0, 0) est valide au début
-        gameBoard.PlayMove(0, 0, 0); // Le joueur 1 joue dans la case (0, 0, 0)
-        assertFalse(gameBoard.IsMoveValid(0, 0, 0)); // La case (0, 0, 0) n'est plus valide après avoir été jouée
-        System.out.println("Un joueur ne peux pas jouer sur une case déjà jouée");
+    @Test /////------------------------------------------------------------
+    public void testWhenIsMoveValidIsFalse(){
+        assertTrue(gameBoard.IsMoveValid(0,0,0));
+        gameBoard.PlayMove(0,0,0);
+        assertEquals(1,gameBoard.getCurrentPlayer());
+        gameBoard.SwitchPlayer();
+        assertEquals(2, gameBoard.getCurrentPlayer());
+        assertFalse(gameBoard.IsMoveValid(0,0,0));
+        gameBoard.PlayMove(0,0,0);
+//        gameBoard.SwitchPlayer();
+//        gameBoard.PlayMove(2,0,0);
+//        gameBoard.SwitchPlayer();
+//        gameBoard.PlayMove(3,0,0);
+//        gameBoard.SwitchPlayer();
+//        gameBoard.PlayMove(4,0,0);
+       gameBoard.PrintBoard();
     }
 
     @Test
@@ -63,7 +79,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(0,1,0);
         gameBoard.PlayMove(0,2,0);
         gameBoard.PlayMove(0,3,0);
-        assertTrue(gameBoard.CheckLines());
+        assertTrue(gameBoard.GameIsWin());
         System.out.println("le jeu détecte bien une ligne vertical au niveau 0");
     }
 
@@ -73,7 +89,8 @@ public class GameBoardTest {
         gameBoard.PlayMove(1,2,2);
         gameBoard.PlayMove(1,1,2);
         gameBoard.PlayMove(1,0,2);
-        assertTrue(gameBoard.CheckLines());
+        gameBoard.PrintBoard();
+        assertTrue(gameBoard.GameIsWin());
         System.out.println("le jeu détecte bien une ligne vertical au niveau 1");
     }
 
@@ -83,7 +100,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(2,1,1);
         gameBoard.PlayMove(2,2,1);
         gameBoard.PlayMove(2,3,1);
-        assertTrue(gameBoard.CheckLines());
+        assertTrue(gameBoard.GameIsWin());
         System.out.println("le jeu détecte bien une ligne vertical au niveau 2");
     }
 
@@ -93,7 +110,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(3,2,3);
         gameBoard.PlayMove(3,1,3);
         gameBoard.PlayMove(3,0,3);
-        assertTrue(gameBoard.CheckLines());
+        assertTrue(gameBoard.GameIsWin());
         System.out.println("le jeu détecte bien une ligne vertical au niveau 3");
     }
 
@@ -104,7 +121,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(0,0,1);
         gameBoard.PlayMove(0,0,2);
         gameBoard.PlayMove(0,0,3);
-        assertTrue(gameBoard.CheckLines());
+        assertTrue(gameBoard.GameIsWin());
         System.out.println("le jeu détecte bien une ligne horizontal au niveau 0 avec x=0 y=0");
     }
 
@@ -114,7 +131,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(0, 1, 1);
         gameBoard.PlayMove(0, 1, 2);
         gameBoard.PlayMove(0, 1, 3);
-        assertTrue(gameBoard.CheckLines());
+        assertTrue(gameBoard.GameIsWin());
         System.out.println("Le jeu détecte bien une ligne horizontale au niveau 0 avec x=0 et y=1");
     }
 
@@ -124,7 +141,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(0, 2, 1);
         gameBoard.PlayMove(0, 2, 2);
         gameBoard.PlayMove(0, 2, 3);
-        assertTrue(gameBoard.CheckLines());
+        assertTrue(gameBoard.GameIsWin());
         System.out.println("Le jeu détecte bien une ligne horizontale au niveau 0 avec x=0 et y=2");
     }
 
@@ -134,7 +151,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(0, 3, 1);
         gameBoard.PlayMove(0, 3, 2);
         gameBoard.PlayMove(0, 3, 3);
-        assertTrue(gameBoard.CheckLines());
+        assertTrue(gameBoard.GameIsWin());
         System.out.println("Le jeu détecte bien une ligne horizontale au niveau 0 avec x=0 et y=3");
     }
 
@@ -144,7 +161,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(1, 1, 2);
         gameBoard.PlayMove(1, 1, 1);
         gameBoard.PlayMove(1, 1, 0);
-        assertTrue(gameBoard.CheckLines());
+        assertTrue(gameBoard.GameIsWin());
         System.out.println("Le jeu détecte bien une ligne horizontale au niveau 1 avec x=1 et y=1");
     }
 
@@ -154,7 +171,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(1,2,2);
         gameBoard.PlayMove(1,2,1);
         gameBoard.PlayMove(1,2,0);
-        assertTrue(gameBoard.CheckLines());
+        assertTrue(gameBoard.GameIsWin());
         System.out.println("le jeu détecte bien une ligne horizontal au niveau 1 avec x=1 et y=2");
     }
 
@@ -164,7 +181,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(2,3,1);
         gameBoard.PlayMove(2,3,2);
         gameBoard.PlayMove(2,3,3);
-        assertTrue(gameBoard.CheckLines());
+        assertTrue(gameBoard.GameIsWin());
         System.out.println("le jeu détecte bien une ligne horizontal au niveau 2 avec x=2 y=3");
     }
 
@@ -174,7 +191,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(3,1,2);
         gameBoard.PlayMove(3,1,1);
         gameBoard.PlayMove(3,1,0);
-        assertTrue(gameBoard.CheckLines());
+        assertTrue(gameBoard.GameIsWin());
         System.out.println("le jeu détecte bien une ligne horizontal au niveau 3");
     }
 
@@ -185,7 +202,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(0,1,1);
         gameBoard.PlayMove(0,2,2);
         gameBoard.PlayMove(0,3,3);
-        assertTrue(gameBoard.CheckLines());
+        assertTrue(gameBoard.GameIsWin());
         System.out.println("Nous prenons en charge les diagonales au niveau 0");
     }
 
@@ -195,7 +212,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(0,2,1);
         gameBoard.PlayMove(0,1,2);
         gameBoard.PlayMove(0,0,3);
-        assertTrue(gameBoard.CheckLines());
+        assertTrue(gameBoard.GameIsWin());
         System.out.println("Nous prenons en charge les diagonales inverser au niveau 0");
     }
 
@@ -205,7 +222,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(1,2,2);
         gameBoard.PlayMove(1,1,1);
         gameBoard.PlayMove(1,0,0);
-        assertTrue(gameBoard.CheckLines());
+        assertTrue(gameBoard.GameIsWin());
         System.out.println("Nous prenons en charge les diagonales inverser au niveau 1");
     }
 
@@ -215,7 +232,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(2,2,2);
         gameBoard.PlayMove(2,1,1);
         gameBoard.PlayMove(2,0,0);
-        assertTrue(gameBoard.CheckLines());
+        assertTrue(gameBoard.GameIsWin());
         System.out.println("Nous prenons en charge les diagonales inverser au niveau 2");
     }
 
@@ -225,7 +242,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(3,1,1);
         gameBoard.PlayMove(3,2,2);
         gameBoard.PlayMove(3,3,3);
-        assertTrue(gameBoard.CheckLines());
+        assertTrue(gameBoard.GameIsWin());
         System.out.println("Nous prenons en charge les diagonales au niveau 3");
     }
 
@@ -236,7 +253,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(1,0,0);
         gameBoard.PlayMove(2,0,0);
         gameBoard.PlayMove(3,0,0);
-        assertTrue(gameBoard.CheckLines());
+        assertTrue(gameBoard.GameIsWin());
         System.out.println("Nous prenons en charge les colonnes 3D");
     }
 
@@ -247,7 +264,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(2, 3, 1);
         gameBoard.PlayMove(1, 3, 2);
         gameBoard.PlayMove(0, 3, 3);
-        assertTrue(gameBoard.CheckLines());
+        assertTrue(gameBoard.GameIsWin());
         System.out.println("le jeu détecte un puissance 4 horizontale descendante 3D qui commence a l'index y=3 z=3 ");
     }
 
@@ -257,7 +274,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(1,2,2);
         gameBoard.PlayMove(2,2,1);
         gameBoard.PlayMove(3,2,0);
-        assertTrue(gameBoard.CheckLines());
+        assertTrue(gameBoard.GameIsWin());
         System.out.println("le jeu détecte un puissance 4 horizontale descendante 3D qui commence a l'index y=2 z=3");
     }
 
@@ -295,7 +312,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(1,1,3);
         gameBoard.PlayMove(2,2,3);
         gameBoard.PlayMove(3,3,3);
-        assertTrue(gameBoard.CheckLines());
+        assertTrue(gameBoard.GameIsWin());
         System.out.println("le jeu détecte un puissance 4 en vertical montant 3D  qui commence à l'index y=0 z=3");
     }
 
@@ -305,7 +322,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(2,1,0);
         gameBoard.PlayMove(1,2,0);
         gameBoard.PlayMove(0,3,0);
-        assertTrue(gameBoard.CheckLines());
+        assertTrue(gameBoard.GameIsWin());
         System.out.println("le jeu détecte un puissance 4 en verticale descendant 3D qui commence a l'index y=0 z=0");
     }
 
@@ -316,7 +333,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(1,1,1);
         gameBoard.PlayMove(2,2,2);
         gameBoard.PlayMove(3,3,3);
-        assertTrue(gameBoard.CheckLines());
+        assertTrue(gameBoard.GameIsWin());
         System.out.println("le jeu détecte un puissance 4 diagonale 3D montante qui commence à l'index x=0 y=0 z=0");
     }
     @Test
@@ -325,7 +342,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(1,2,2);
         gameBoard.PlayMove(2,1,1);
         gameBoard.PlayMove(3,0,0);
-        assertTrue(gameBoard.CheckLines());
+        assertTrue(gameBoard.GameIsWin());
         System.out.println("le jeu détecte un puissance 4 diagonale 3D descendante qui commence à l'index x=0 y=3 z=3");
     }
 
@@ -335,7 +352,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(1,2,1);
         gameBoard.PlayMove(2,1,2);
         gameBoard.PlayMove(3,0,3);
-        assertTrue(gameBoard.CheckLines());
+        assertTrue(gameBoard.GameIsWin());
         System.out.println("le jeu détecte un puissance 4 diagonale 3D montante qui commence à l'index x=0 y=3 z=0");
     }
 
@@ -345,7 +362,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(1,1,2);
         gameBoard.PlayMove(2,2,1);
         gameBoard.PlayMove(3,3,0);
-        assertTrue(gameBoard.CheckLines());
+        assertTrue(gameBoard.GameIsWin());
         System.out.println("le jeu détecte un puissance 4 diagonale 3D descendante qui commence à l'index x=0 y=0 z=3");
     }
 
@@ -357,7 +374,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(0,0,3);
         gameBoard.PlayMove(0,1,1);
         gameBoard.PlayMove(0,1,2);
-        assertFalse(gameBoard.CheckLines());
+        assertFalse(gameBoard.GameIsWin());
         System.out.println("le jeu détecte bien 4 fois la même valeur mais pas sur le meme axe ");
     }
 
@@ -367,7 +384,7 @@ public class GameBoardTest {
         gameBoard.PlayMove(3, 3, 1);
         gameBoard.PlayMove(1, 3, 2);
         gameBoard.PlayMove(0, 3, 3);
-        assertFalse(gameBoard.CheckLines());
+        assertFalse(gameBoard.GameIsWin());
         System.out.println("le jeu détecte bien que la ligne horizontale 3D n'est pas correct");
     }
 }
