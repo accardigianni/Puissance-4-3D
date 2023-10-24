@@ -53,16 +53,11 @@ public class GameBoardTest {
         gameBoard.playMove(0,0,0);
         assertEquals(1,gameBoard.getCurrentPlayer());
         gameBoard.switchPlayer();
+        assertEquals(2,gameBoard.getCurrentPlayer());
         assertFalse(gameBoard.isMoveValid(0,0,0));
         gameBoard.playMove(0,0,0);
         gameBoard.printBoard();
-//        gameBoard.SwitchPlayer();
-//        gameBoard.PlayMove(2,0,0);
-//        gameBoard.SwitchPlayer();
-//        gameBoard.PlayMove(3,0,0);
-//        gameBoard.SwitchPlayer();
-//        gameBoard.PlayMove(4,0,0);
-//       gameBoard.PrintBoard();
+        System.out.println("Le joueur 2 ne peux pas jouer sur une case déjà jouer par le joueur 1");
     }
 
     @Test
